@@ -1,0 +1,129 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "Reference",
+"class": "Agent",
+"language": "GDScript",
+"path": "res://NEAT_code/agent.gd"
+}, {
+"base": "Reference",
+"class": "GeneticAlgorithm",
+"language": "GDScript",
+"path": "res://NEAT_code/ga.gd"
+}, {
+"base": "Reference",
+"class": "Genome",
+"language": "GDScript",
+"path": "res://NEAT_code/genome.gd"
+}, {
+"base": "Node2D",
+"class": "Highlighter",
+"language": "GDScript",
+"path": "res://NEAT_usability/gui/highlighter.gd"
+}, {
+"base": "Reference",
+"class": "Link",
+"language": "GDScript",
+"path": "res://NEAT_code/links.gd"
+}, {
+"base": "CanvasLayer",
+"class": "NeatGUI",
+"language": "GDScript",
+"path": "res://NEAT_usability/gui/NeatGUI.gd"
+}, {
+"base": "Reference",
+"class": "NeuralNet",
+"language": "GDScript",
+"path": "res://NEAT_code/neuralnet.gd"
+}, {
+"base": "Reference",
+"class": "Neuron",
+"language": "GDScript",
+"path": "res://NEAT_code/neurons.gd"
+}, {
+"base": "Reference",
+"class": "Species",
+"language": "GDScript",
+"path": "res://NEAT_code/species.gd"
+} ]
+_global_script_class_icons={
+"Agent": "",
+"GeneticAlgorithm": "",
+"Genome": "",
+"Highlighter": "",
+"Link": "",
+"NeatGUI": "",
+"NeuralNet": "",
+"Neuron": "",
+"Species": ""
+}
+
+[application]
+
+config/name="BacterAI"
+run/main_scene="res://scenes/Menu.tscn"
+boot_splash/show_image=false
+boot_splash/bg_color=Color( 0.141176, 0.141176, 0.141176, 1 )
+config/icon="res://icon.png"
+
+[autoload]
+
+Innovations="*res://NEAT_code/innovations.gd"
+Params="*res://NEAT_code/params.gd"
+Utils="*res://NEAT_code/utils.gd"
+Global="*res://scripts/Global.gd"
+
+[gdnative]
+
+singletons=[  ]
+
+[input]
+
+camera_pan={
+"deadzone": 0.5,
+"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":2,"pressed":false,"doubleclick":false,"script":null)
+ ]
+}
+camera_zoom_in={
+"deadzone": 0.5,
+"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":4,"pressed":false,"doubleclick":false,"script":null)
+ ]
+}
+camera_zoom_out={
+"deadzone": 0.5,
+"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":5,"pressed":false,"doubleclick":false,"script":null)
+ ]
+}
+increase_sim_speed={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":46,"unicode":0,"echo":false,"script":null)
+ ]
+}
+decrease_sim_speed={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":44,"unicode":0,"echo":false,"script":null)
+ ]
+}
+reset_sim_speed={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":47,"unicode":0,"echo":false,"script":null)
+ ]
+}
+toggle_debug_lines={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":16777244,"unicode":0,"echo":false,"script":null)
+ ]
+}
+
+[rendering]
+
+environment/default_clear_color=Color( 0.0901961, 0.0901961, 0.0901961, 1 )
+environment/default_environment="res://default_env.tres"
