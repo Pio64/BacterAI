@@ -195,6 +195,9 @@ func _on_GenerationTimer_timeout():
 
 
 func next_gen():
+	if !ga:
+		return
+
 	ga.evaluate_generation()
 	ga.next_generation()
 
