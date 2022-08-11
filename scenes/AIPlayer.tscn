@@ -3,7 +3,7 @@
 [ext_resource path="res://scripts/AIPlayer.gd" type="Script" id=1]
 [ext_resource path="res://scenes/Cell.tscn" type="PackedScene" id=2]
 
-[node name="AIPlayer" type="Node2D" groups=["Player"]]
+[node name="AIPlayer" type="Node2D" groups=["AIPlayer", "Player"]]
 position = Vector2( 15.375, 10.375 )
 script = ExtResource( 1 )
 

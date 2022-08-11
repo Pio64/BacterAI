@@ -5,14 +5,14 @@ const FOOD_RESPAWN_TIME = 30
 const MAP_SIZE = 8200
 const PLAYER_SPEED = 20
 const PLAYER_ACC = 3
-const PLAYER_START_RADIUS = 25.0
+const PLAYER_START_MASS = 10.0
 const MASS_LOSS_TIMER = 1.0
 export (PackedScene) var food_scene
 export (PackedScene) var player_scene
 var food_respawn_queue = []
 var simulation_speed = 1
 var cur_mass_loss_timer = MASS_LOSS_TIMER
-var eat_check_time = 0
+#var eat_check_time = 0
 var show_debug_lines = false
 var ga
 var standalone_network
@@ -92,17 +92,20 @@ func _physics_process(delta):
 		#	cell.queue_free()
 		#	cell.player.cell_killed(cell)
 
-	if cur_mass_loss_timer <= 0:
-		eat_check_time = OS.get_unix_time()
+	#if cur_mass_loss_timer <= 0:
+	#	eat_check_time = Time.get_unix_time_from_system()
 
 	var cells = get_tree().get_nodes_in_group("Cell")
 	for cell in cells:
 		if cur_mass_loss_timer <= 0:
+			if cell.mass > PLAYER_START_MASS:
+				cell.mass_loss() # cells lose mass over time
+
 			# kill cells if they haven't eaten in a while
-			if eat_check_time - cell.last_ate_time >= 30:
-				cell.queue_free()
-				cell.player.cell_killed(cell)
-				continue
+			#if eat_check_time - cell.last_ate_time >= 30:
+			#	cell.queue_free()
+			#	cell.player.cell_killed(cell)
+			#	continue
 
 		var dir = cell.player.movement_dir.normalized() * cell.player.movement_speed
 		var speed = PLAYER_SPEED / (cell.radius / 3000)
@@ -183,13 +186,6 @@ func spawn_ai_player(ai_player):
 	add_child(ai_player)
 
 
-func circle_contains_circle(r1, r2, distance):
-	if r1 > (r2 + distance):
-		return true
-	else:
-		return false
-
-
 func _on_GenerationTimer_timeout():
 	next_gen()
 
@@ -201,7 +197,7 @@ func next_gen():
 	ga.evaluate_generation()
 	ga.next_generation()
 
-	for player in get_tree().get_nodes_in_group("Player"):
-		player.queue_free()
+	for ai_player in get_tree().get_nodes_in_group("AIPlayer"):
+		ai_player.queue_free()
 
 	spawn_all_ai() # respawn AI

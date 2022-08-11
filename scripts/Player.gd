@@ -23,7 +23,8 @@ func _ready():
 
 	color = Color(rand_range(0, 1), rand_range(0, 1), rand_range(0, 1))
 	$Cell.player = self
-	$Cell.radius = game.PLAYER_START_RADIUS
+	$Cell.mass = game.PLAYER_START_MASS
+	$Cell.radius = Global.mass_to_radius(game.PLAYER_START_MASS)
 	$Cell.update_sprite()
 	$Cell.update_collider()
 	cells.append($Cell)
@@ -50,7 +51,7 @@ func _physics_process(delta):
 			if !col.is_in_group("Food") and !col.is_in_group("Cell") and !col.is_in_group("Wall"):
 				col = col.get_parent()
 
-			col_data[i][1] = col.radius / 1000
+			col_data[i][1] = col.mass / 1000
 		else:
 			col_data[i][0] = -1
 			col_data[i][1] -1
@@ -70,19 +71,15 @@ func _process(delta):
 
 
 func update_zoom_level():
-	#$Camera2D.zoom = Vector2($Camera2D.zoom.x + (radius / 50000), $Camera2D.zoom.y + (radius / 50000))
-	var radius = 0.0
-	var total_area = 0.0
+	var total_mass = 0.0
 	for cell in cells:
-		var cell_area = PI * pow(cell.radius, 2)
-		total_area += cell_area
+		total_mass += cell.mass
 
-	radius = sqrt(total_area / PI)
-	var zoom = 0.5 + (radius / 64)
+	var zoom = sqrt(total_mass * len(cells)) * 0.027 + 1
 	$Camera2D.zoom = Vector2(zoom, zoom)
 
 
-func cell_killed(cell):
+func cell_killed(cell, _was_eaten):
 	print("cell killed")
 	var index = cells.find(cell)
 	if index > -1:

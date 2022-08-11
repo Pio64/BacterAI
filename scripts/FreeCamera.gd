@@ -2,8 +2,6 @@ extends Camera2D
 
 
 # Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
 var is_panning = false
 const ZOOM_SENS = 0.5
 

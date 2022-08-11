@@ -7,7 +7,6 @@ var game
 var movement_dir = Vector2.ZERO#(get_viewport().size.x / 2, get_viewport().size.y / 2)
 var movement_speed = 0.0
 var split_pressed = false
-var start_radius = 0
 var rays = []
 var col_data = []
 var fitness = 0.0
@@ -28,16 +27,14 @@ func _ready():
 	for i in range(0, NUM_RAYS):
 		col_data.append([-1, -1])
 
-	if start_radius == 0:
-		start_radius = game.PLAYER_START_RADIUS
-
-	color = Color(rand_range(0, 1), rand_range(0, 1), rand_range(0, 1))
-	$Cell.radius = start_radius
+	color = Global.rand_color()
+	$Cell.mass = game.PLAYER_START_MASS
+	$Cell.radius = Global.mass_to_radius(game.PLAYER_START_MASS)
 	$Cell.update_sprite()
 	$Cell.update_collider()
 	cell = $Cell
 
-	cell.connect("radius_gain", self, "_cell_gained_radius")
+	cell.connect("mass_gain", self, "_cell_gained_mass")
 
 
 func _physics_process(delta):
@@ -64,7 +61,7 @@ func sense() -> Array:
 			if !col.is_in_group("Food") and !col.is_in_group("Cell") and !col.is_in_group("Wall"):
 				col = col.get_parent()
 
-			col_data[i][1] = col.radius / 1000
+			col_data[i][1] = col.mass / 1000
 		else:
 			col_data[i][0] = -1
 			col_data[i][1] -1
@@ -87,7 +84,7 @@ func sense() -> Array:
 		velocity_dir.x,
 		velocity_dir.y,
 		velocity_length / 1000,
-		cell.radius / 1000,
+		cell.mass / 1000,
 		int(contains_object),
 		col_data[0][0], col_data[0][1],
 		col_data[1][0], col_data[1][1],
@@ -125,6 +122,7 @@ func get_fitness() -> float:
 func cell_killed(cell, was_eaten=false):
 	#print("cell killed")
 	is_dead = true
+	fitness = cell.mass
 
 	#if was_eaten:
 	#	fitness -= 10
@@ -132,8 +130,9 @@ func cell_killed(cell, was_eaten=false):
 	emit_signal("death") # needed for GeneticAlgorithm
 
 
-func _cell_gained_radius(amount):
-	fitness = cell.radius
+func _cell_gained_mass(amount):
+	#fitness = cell.mass
+	pass
 
 
 func update_zoom_level():

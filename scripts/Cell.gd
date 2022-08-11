@@ -3,21 +3,22 @@ extends KinematicBody2D
 var player
 var game
 var radius = 0.0
+var mass = 0.0
 var velocity = Vector2()
 var cell_scene = load("res://scenes/Cell.tscn")
 var merge_time
-var last_ate_time = 0
+#var last_ate_time = 0
 var tracked_food = []
 var tracked_cells = []
 
-signal radius_gain(amount_gained)
+signal mass_gain(amount_gained)
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	game = get_node("/root/Game")
 	merge_time = calculate_merge_time(radius)
-	last_ate_time = OS.get_unix_time()
+	#last_ate_time = Time.get_unix_time_from_system()
 
 	# disable collisions with all cells except our player's cells
 	#var cells = get_tree().get_nodes_in_group("Cell")
@@ -50,14 +51,14 @@ func _physics_process(_delta):
 	#		#	add_collision_exception_with(player.cell)
 	for food in tracked_food:
 		var dist = global_position.distance_to(food.global_position)
-		if game.circle_contains_circle(radius, food.radius, dist):
-			add_radius(food.radius)
+		if Global.covers_cell_enough(radius, food.radius, dist):
+			add_mass(food.mass)
 			food.on_eaten()
 
 	for cell in tracked_cells:
 		var dist = global_position.distance_to(cell.global_position)
-		if game.circle_contains_circle(radius, cell.radius, dist):
-			add_radius(cell.radius)
+		if Global.can_eat_cell(mass, cell.mass, radius, cell.radius, dist):
+			add_mass(cell.mass)
 			cell.queue_free()
 			cell.player.cell_killed(cell, true)
 
@@ -94,8 +95,9 @@ func get_circle(steps: float, radius: float):
 func update_sprite():
 	var sprite_scale = radius / 100
 	$Shape.scale = Vector2(sprite_scale, sprite_scale)
-	$Shape.modulate = player.color
+	$Shape.self_modulate = player.color
 	$Shape.z_index = radius
+	$Shape/MassLabel.text = str(floor(mass))
 
 
 func update_collider():
@@ -105,19 +107,16 @@ func update_collider():
 	$Area2D/CollisionShape2D.shape = shape
 
 
-func add_radius(value):
-	var eaten_area = PI * pow(value, 2)
-	var player_area = PI * pow(radius, 2)
-	var sum = eaten_area + player_area
-	radius = sqrt(sum / PI)
+func add_mass(value):
+	mass += value
+	radius = Global.mass_to_radius(mass)
 	update_sprite()
 	update_collider()
 	player.update_zoom_level()
-	last_ate_time = OS.get_unix_time()
-	emit_signal("radius_gain", value)
+	#last_ate_time = Time.get_unix_time_from_system()
+	emit_signal("mass_gain", value)
 
 
-# Cells grow by either collecting pellets, or by consuming smaller cells or viruses.
 # Cells lose mass over time, at a rate of 0.2% of their mass per second.
 # This means that if you don't consume anything, you would lose half your mass in
 # 5 minutes and 47 seconds. This also means that cells of certain size can no longer sustain their
@@ -125,21 +124,18 @@ func add_radius(value):
 # their size, or grow further. There is a setting to see the mass of your cell(s).
 # https://agario.fandom.com/wiki/Cell
 func mass_loss():
-	var player_area = PI * pow(radius, 2)
-	var loss_area = player_area * 0.002
-	var new_area = player_area - loss_area
-	radius = sqrt(new_area / PI)
+	mass /= 1.002
+	radius = Global.mass_to_radius(mass)
 	update_sprite()
 	update_collider()
 	player.update_zoom_level()
 
 
 func split():
-	if radius >= 50:
+	if mass >= 35:
 		print("split")
-		var cell_area = PI * pow(radius, 2)
-		cell_area /= 2
-		radius = sqrt(cell_area / PI)
+		mass /= 2
+		radius = Global.mass_to_radius(mass)
 		update_sprite()
 		update_collider()
 
@@ -147,6 +143,7 @@ func split():
 
 		var mouse_pos = get_global_mouse_position()
 		var dir = (mouse_pos - global_position) * 1000
+		clone.mass = mass
 		clone.radius = radius
 		var speed = player.game.PLAYER_SPEED / (clone.radius / 3000)
 		var vel = dir.clamped(speed + 1000)
@@ -167,6 +164,7 @@ func split():
 			new_player.global_position = global_position
 			default_cell.transform = transform
 			default_cell.global_position = global_position
+			default_cell.mass = mass
 			default_cell.radius = radius
 			default_cell.velocity = vel
 			default_cell.player = new_player
@@ -192,8 +190,8 @@ func split():
 # calculated as 30 seconds plus 2.33% of the cells mass
 # (e.g. if mass is 50, the cool down time is 31 seconds)
 # https://agario.fandom.com/wiki/Splitting
-func calculate_merge_time(cell_radius):
-	return 30.0 + cell_radius * 0.0233
+func calculate_merge_time(cell_mass):
+	return 30.0 + cell_mass * 0.0233
 
 
 func _on_Area2D_area_entered(area):
