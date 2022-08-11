@@ -67,7 +67,7 @@ func _draw():
 	if !game.show_debug_lines:
 		return
 
-	var positions = get_circle(player.NUM_RAYS, 500)
+	var positions = get_circle(player.NUM_RAYS, 900)
 	for i in range(0, len(positions)):
 		if player.col_data[i][0] != -1:
 			draw_line(Vector2(0, 0), positions[i], Color(1, 0, 0, 0.5))

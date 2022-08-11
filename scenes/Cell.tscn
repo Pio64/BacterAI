@@ -112,81 +112,81 @@ align = 1
 
 [node name="Ray0" type="RayCast2D" parent="."]
 rotation = 1.5708
-cast_to = Vector2( 0, -500 )
+cast_to = Vector2( 0, -900 )
 collide_with_areas = true
 
 [node name="Ray1" type="RayCast2D" parent="."]
 rotation = 1.9635
-cast_to = Vector2( 0, -500 )
+cast_to = Vector2( 0, -900 )
 collide_with_areas = true
 
 [node name="Ray2" type="RayCast2D" parent="."]
 rotation = 2.35619
-cast_to = Vector2( 0, -500 )
+cast_to = Vector2( 0, -900 )
 collide_with_areas = true
 
 [node name="Ray3" type="RayCast2D" parent="."]
 rotation = 2.74889
-cast_to = Vector2( 0, -500 )
+cast_to = Vector2( 0, -900 )
 collide_with_areas = true
 
 [node name="Ray4" type="RayCast2D" parent="."]
 rotation = 3.14159
-cast_to = Vector2( 0, -500 )
+cast_to = Vector2( 0, -900 )
 collide_with_areas = true
 
 [node name="Ray5" type="RayCast2D" parent="."]
 rotation = -2.7489
-cast_to = Vector2( 0, -500 )
+cast_to = Vector2( 0, -900 )
 collide_with_areas = true
 
 [node name="Ray6" type="RayCast2D" parent="."]
 rotation = -2.3562
-cast_to = Vector2( 0, -500 )
+cast_to = Vector2( 0, -900 )
 collide_with_areas = true
 
 [node name="Ray7" type="RayCast2D" parent="."]
 rotation = -1.9635
-cast_to = Vector2( 0, -500 )
+cast_to = Vector2( 0, -900 )
 collide_with_areas = true
 
 [node name="Ray8" type="RayCast2D" parent="."]
 rotation = -1.5708
-cast_to = Vector2( 0, -500 )
+cast_to = Vector2( 0, -900 )
 collide_with_areas = true
 
 [node name="Ray9" type="RayCast2D" parent="."]
 rotation = -1.1781
-cast_to = Vector2( 0, -500 )
+cast_to = Vector2( 0, -900 )
 collide_with_areas = true
 
 [node name="Ray10" type="RayCast2D" parent="."]
 rotation = -0.785395
-cast_to = Vector2( 0, -500 )
+cast_to = Vector2( 0, -900 )
 collide_with_areas = true
 
 [node name="Ray11" type="RayCast2D" parent="."]
 rotation = -0.392695
-cast_to = Vector2( 0, -500 )
+cast_to = Vector2( 0, -900 )
 collide_with_areas = true
 
 [node name="Ray12" type="RayCast2D" parent="."]
-cast_to = Vector2( 0, -500 )
+cast_to = Vector2( 0, -900 )
 collide_with_areas = true
 
 [node name="Ray13" type="RayCast2D" parent="."]
 rotation = 0.392699
-cast_to = Vector2( 0, -500 )
+cast_to = Vector2( 0, -900 )
 collide_with_areas = true
 
 [node name="Ray14" type="RayCast2D" parent="."]
 rotation = 0.785398
-cast_to = Vector2( 0, -500 )
+cast_to = Vector2( 0, -900 )
 collide_with_areas = true
 
 [node name="Ray15" type="RayCast2D" parent="."]
 rotation = 1.1781
-cast_to = Vector2( 0, -500 )
+cast_to = Vector2( 0, -900 )
 collide_with_areas = true
 
 [node name="Area2D" type="Area2D" parent="."]
