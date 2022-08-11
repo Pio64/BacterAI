@@ -2,13 +2,14 @@ extends Node2D
 
 # Declare member variables here. Examples:
 const FOOD_RESPAWN_TIME = 30
-const MAP_SIZE = 8200
+const MAP_SIZE = 11000
 const PLAYER_SPEED = 20
 const PLAYER_ACC = 3
 const PLAYER_START_MASS = 10.0
 const MASS_LOSS_TIMER = 1.0
 export (PackedScene) var food_scene
 export (PackedScene) var player_scene
+export (PackedScene) var wall_scene
 var food_respawn_queue = []
 var simulation_speed = 1
 var cur_mass_loss_timer = MASS_LOSS_TIMER
@@ -31,6 +32,7 @@ func _ready():
 
 func start_new_simulation():
 	ga = GeneticAlgorithm.new(37, 3, "res://scenes/AIPlayer.tscn", true, "custom")
+	place_map_walls()
 	spawn_all_food()
 	add_child(ga)
 	spawn_all_ai()
@@ -129,6 +131,30 @@ func _physics_process(delta):
 
 	if ga and ga.all_agents_dead:
 		next_gen()
+
+
+func place_map_walls():
+	var wallLeft = wall_scene.instance()
+	wallLeft.position = Vector2(0, MAP_SIZE / 2)
+	wallLeft.scale = Vector2(1, MAP_SIZE)
+	add_child(wallLeft)
+
+	var wallRight = wall_scene.instance()
+	wallRight.position = Vector2(MAP_SIZE, MAP_SIZE / 2)
+	wallRight.scale = Vector2(1, MAP_SIZE)
+	add_child(wallRight)
+
+	var wallTop = wall_scene.instance()
+	wallTop.position = Vector2(MAP_SIZE / 2, 0)
+	wallTop.scale = Vector2(1, MAP_SIZE)
+	wallTop.rotation_degrees = 90
+	add_child(wallTop)
+
+	var wallBottom = wall_scene.instance()
+	wallBottom.position = Vector2(MAP_SIZE / 2, MAP_SIZE)
+	wallBottom.scale = Vector2(1, MAP_SIZE)
+	wallBottom.rotation_degrees = 90
+	add_child(wallBottom)
 
 
 func spawn_all_food():
