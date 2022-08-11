@@ -94,7 +94,14 @@ func get_circle(steps: float, radius: float):
 
 func update_sprite():
 	var sprite_scale = radius / 100
-	$Shape.scale = Vector2(sprite_scale, sprite_scale)
+
+	if is_inside_tree():
+		var tween = get_tree().create_tween()
+		tween.set_ease(Tween.EASE_OUT)
+		tween.tween_property($Shape, "scale", Vector2(sprite_scale, sprite_scale), 0.1)
+	else:
+		$Shape.scale = Vector2(sprite_scale, sprite_scale)
+
 	$Shape.self_modulate = player.color
 	$Shape.z_index = radius
 	$Shape/MassLabel.text = str(floor(mass))
